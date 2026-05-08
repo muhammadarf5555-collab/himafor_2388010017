@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIMAFOR - Informatics Game Studio</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #07070a;
+            --primary: #00f0ff;
+            --secondary: #ff003c;
+            --accent: #7000ff;
+            --text-main: #f0f0f0;
+            --text-muted: #8892b0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Glitch Text Effect */
+        .glitch {
+            position: relative;
+            color: white;
+            font-size: clamp(3rem, 5vw, 5.5rem);
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+        }
+
+        .glitch::before {
+            left: 3px;
+            text-shadow: -2px 0 var(--secondary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -3px;
+            text-shadow: -2px 0 var(--primary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(61px, 9999px, 52px, 0);
+            }
+
+            10% {
+                clip: rect(98px, 9999px, 81px, 0);
+            }
+
+            20% {
+                clip: rect(18px, 9999px, 89px, 0);
+            }
+
+            30% {
+                clip: rect(52px, 9999px, 78px, 0);
+            }
+
+            40% {
+                clip: rect(78px, 9999px, 66px, 0);
+            }
+
+            50% {
+                clip: rect(11px, 9999px, 20px, 0);
+            }
+
+            60% {
+                clip: rect(3px, 9999px, 65px, 0);
+            }
+
+            70% {
+                clip: rect(34px, 9999px, 89px, 0);
+            }
+
+            80% {
+                clip: rect(47px, 9999px, 19px, 0);
+            }
+
+            90% {
+                clip: rect(41px, 9999px, 10px, 0);
+            }
+
+            100% {
+                clip: rect(20px, 9999px, 3px, 0);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(29px, 9999px, 83px, 0);
+            }
+
+            10% {
+                clip: rect(36px, 9999px, 63px, 0);
+            }
+
+            20% {
+                clip: rect(81px, 9999px, 95px, 0);
+            }
+
+            30% {
+                clip: rect(27px, 9999px, 64px, 0);
+            }
+
+            40% {
+                clip: rect(39px, 9999px, 88px, 0);
+            }
+
+            50% {
+                clip: rect(43px, 9999px, 5px, 0);
+            }
+
+            60% {
+                clip: rect(18px, 9999px, 73px, 0);
+            }
+
+            70% {
+                clip: rect(82px, 9999px, 46px, 0);
+            }
+
+            80% {
+                clip: rect(97px, 9999px, 10px, 0);
+            }
+
+            90% {
+                clip: rect(59px, 9999px, 37px, 0);
+            }
+
+            100% {
+                clip: rect(86px, 9999px, 29px, 0);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(7, 7, 10, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .logo span {
+            color: var(--primary);
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            padding: 0.8rem 2.2rem;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn-alt {
+            border-color: var(--glass-border);
+            color: var(--text-main);
+        }
+
+        .btn-alt::before {
+            background: var(--glass-bg);
+        }
+
+        .btn-alt:hover {
+            color: var(--text-main);
+            border-color: var(--text-main);
+            box-shadow: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(7, 7, 10, 1) 0%, rgba(7, 7, 10, 0.8) 50%, rgba(7, 7, 10, 0.1) 100%),
+                url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, var(--bg-dark), transparent);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            color: var(--primary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .hero-subtitle::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 2rem 0 3rem 0;
+            max-width: 600px;
+            font-weight: 300;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .stat-item h4 {
+            font-size: 2.5rem;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 0;
+        }
+
+        .stat-item h4 span {
+            color: var(--primary);
+        }
+
+        .stat-item p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        /* General Section */
+        .section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+            max-width: 600px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title span {
+            color: transparent;
+            -webkit-text-stroke: 1px var(--primary);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            group: hover;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(0, 240, 255, 0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: transform 0.4s;
+        }
+
+        .glass-card:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .glass-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .glass-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Portfolio */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/10;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            inset: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(7, 7, 10, 0.95) 0%, rgba(7, 7, 10, 0.6) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .portfolio-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+
+        .tag-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tag {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .portfolio-overlay h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-overlay p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Banner CTA */
+        .cta-section {
+            background: linear-gradient(45deg, rgba(70, 0, 255, 0.1), rgba(0, 240, 255, 0.1));
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+            padding: 80px 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.1;
+            z-index: 0;
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #050508;
+            padding: 4rem 5% 2rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .socials {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .socials a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .socials a:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+                /* Hide on mobile for simplicity in this single file demo */
+            }
+
+            .glitch {
+                font-size: 2.5rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+            }
+
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-gamepad"></i> HIMAFOR<span>STUDIOS</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#beranda">Beranda</a></li>
+            <li><a href="#about">Tentang Kami</a></li>
+            <li><a href="#visi-misi">Visi & Misi</a></li>
+            <li><a href="#games">Karya</a></li>
+        </ul>
+        <a href="#contact" class="btn">Join Us</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content fade-in">
+            <span class="hero-subtitle">Inkubator Bisnis Game Mahasiswa</span>
+            <h1 class="glitch" data-text="MENCIPTAKAN MASA DEPAN MEDIA INTERAKTIF">MENCIPTAKAN MASA DEPAN MEDIA
+                INTERAKTIF</h1>
+            <p>Himpunan Mahasiswa Informatika mengubah passion menjadi mahakarya yang menguntungkan dan dapat dimainkan.
+                Kami adalah inkubator kampus terdepan yang mendorong batas-batas pengembangan game indie dan bisnis
+                e-sports.</p>
+            <div class="hero-btns">
+                <a href="#games" class="btn">Jelajahi Karya</a>
+                <a href="#visi-misi" class="btn btn-alt">Visi & Misi Kami</a>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <h4>12<span>+</span></h4>
+                    <p>Game Diterbitkan</p>
+                </div>
+                <div class="stat-item">
+                    <h4>850<span>k</span></h4>
+                    <p>Unduhan Global</p>
+                </div>
+                <div class="stat-item">
+                    <h4>4</h4>
+                    <p>Studio Aktif</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="section-header fade-in">
+            <h2 class="section-title">Tentang <span>Kami</span></h2>
+            <p style="color: var(--text-muted); margin-top: 1rem;">Menjembatani teori akademik dengan kesuksesan di
+                industri game komersial.</p>
+        </div>
+        <div class="grid">
+            <div class="glass-card fade-in">
+                <i class="fa-solid fa-rocket"></i>
+                <h3>Inkubasi Startup</h3>
+                <p>Kami menyediakan pendanaan awal, bimbingan industri, dan sumber daya penting bagi tim mahasiswa untuk
+                    membangun, memasarkan, dan menerbitkan game indie mereka sendiri.</p>
+            </div>
+            <div class="glass-card fade-in" style="transition-delay: 0.1s;">
+                <i class="fa-solid fa-vr-cardboard"></i>
+                <h3>Teknologi Terkini</h3>
+                <p>Akses eksklusif ke peralatan AR/VR terbaru, studio motion capture, dan workstation pengembangan kelas
+                    atas untuk kreasi tanpa kompromi.</p>
+            </div>
+            <div class="glass-card fade-in" style="transition-delay: 0.2s;">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Ketajaman Bisnis</h3>
+                <p>Selain menulis kode, kami mengajarkan strategi monetisasi, pitching publisher, manajemen IP, dan
+                    pembangunan komunitas untuk memastikan kesuksesan komersial.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visi Misi Section -->
+    <section id="visi-misi" class="section" style="background: rgba(255,255,255,0.01);">
+        <div class="section-header fade-in" style="margin-left: auto; text-align: right;">
+            <h2 class="section-title">Visi & <span>Misi</span></h2>
+            <p style="color: var(--text-muted); margin-top: 1rem;">Arah dan tujuan kami dalam membangun masa depan
+                developer game.</p>
+        </div>
+        <div class="grid">
+            <div class="glass-card fade-in">
+                <i class="fa-solid fa-eye"></i>
+                <h3>Visi</h3>
+                <p>Menjadi inkubator bisnis game terkemuka di tingkat nasional yang menghasilkan studio game dan
+                    talenta-talenta profesional berdaya saing global, serta memajukan ekosistem industri kreatif digital
+                    di Indonesia.</p>
+            </div>
+            <div class="glass-card fade-in" style="transition-delay: 0.1s;">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>Misi: Edukasi & Inovasi</h3>
+                <p>Menyediakan ekosistem pembelajaran yang komprehensif dari segi teknis (programming, art, design)
+                    hingga bisnis, serta mendorong inovasi teknologi interaktif terbaru.</p>
+            </div>
+            <div class="glass-card fade-in" style="transition-delay: 0.2s;">
+                <i class="fa-solid fa-handshake"></i>
+                <h3>Misi: Kolaborasi & Komersialisasi</h3>
+                <p>Membangun jaringan yang kuat dengan para pelaku industri, investor, dan publisher, serta mendampingi
+                    mahasiswa dalam memonetisasi dan merilis karya mereka ke pasar global.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games/Portfolio Section -->
+    <section id="games" class="section">
+        <div class="section-header fade-in">
+            <h2 class="section-title">Karya <span>Studio</span></h2>
+            <p style="color: var(--text-muted); margin-top: 1rem;">Gim pemenang penghargaan yang dikembangkan sepenuhnya
+                oleh mahasiswa inkubator HIMAFOR.</p>
+        </div>
+        <div class="portfolio-grid">
+            <!-- Game 1 -->
+            <div class="portfolio-item fade-in">
+                <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop"
+                    alt="Cyber Core Game">
+                <div class="portfolio-overlay">
+                    <div class="tag-container">
+                        <span class="tag">Action RPG</span>
+                        <span class="tag">PC/Console</span>
+                    </div>
+                    <h3>Cyber Core: Neon Dreams</h3>
+                    <p>Hack-and-slash bertempo cepat yang berlatarkan metropolis cyberpunk distopia yang memukau.
+                    </p>
+                </div>
+            </div>
+            <!-- Game 2 -->
+            <div class="portfolio-item fade-in" style="transition-delay: 0.1s;">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+                    alt="Stellar Command Game">
+                <div class="portfolio-overlay">
+                    <div class="tag-container">
+                        <span class="tag">Strategi 4X</span>
+                        <span class="tag">Multiplayer</span>
+                    </div>
+                    <h3>Stellar Command</h3>
+                    <p>Bangun, perdagangkan, dan perluas kerajaan galaksimu dalam gim strategi besar yang diakui secara
+                        kritis ini.
+                    </p>
+                </div>
+            </div>
+            <!-- Game 3 -->
+            <div class="portfolio-item fade-in" style="transition-delay: 0.2s;">
+                <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop"
+                    alt="Echoes of Time Game">
+                <div class="portfolio-overlay">
+                    <div class="tag-container">
+                        <span class="tag">Puzzle Platformer</span>
+                        <span class="tag">Mobile</span>
+                    </div>
+                    <h3>Echoes of Time</h3>
+                    <p>Manipulasi jalinan waktu itu sendiri untuk memecahkan teka-teki lingkungan yang rumit dan
+                        mengembalikan keseimbangan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section fade-in">
+        <div class="cta-content">
+            <h2>Siap Membuat Game-mu Sendiri?</h2>
+            <p
+                style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Bergabunglah dengan HIMAFOR sekarang dan dapatkan akses ke program inkubator, jaringan bimbingan, dan
+                peralatan pengembangan kami.
+            </p>
+            <a href="#" class="btn">Daftar Inkubasi</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-gamepad"></i> HIMAFOR<span>STUDIOS</span>
+                </a>
+                <p>Memberdayakan generasi pengembang game dan pengusaha media interaktif berikutnya.</p>
+                <div class="socials">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                    <a href="#"><i class="fa-brands fa-steam"></i></a>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 4rem; flex-wrap: wrap;">
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif;">Inkubator
+                    </h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem;">
+                        <li><a href="#"
+                                style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;">Detail
+                                Program</a></li>
+                        <li><a href="#"
+                                style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;">Mentor</a>
+                        </li>
+                        <li><a href="#"
+                                style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;">Kisah
+                                Sukses</a></li>
+                        <li><a href="#"
+                                style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;">Daftar
+                                Sekarang</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif;">Profil
+                        Pembuat
+                    </h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem;">
+                        <li><span style="color: var(--text-muted);">Nama:</span><br><strong
+                                style="color: var(--primary);">MUHAMMAD ARIF RIZKY</strong></li>
+                        <li><span style="color: var(--text-muted);">NIM:</span><br><strong
+                                style="color: var(--primary);">2388010017</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 HIMAFOR - Himpunan Mahasiswa Informatika. Hak Cipta Dilindungi.</p>
+            <p style="margin-top: 10px;">Universitas Informatika &bull; Gedung Teknologi Lt. 3</p>
+        </div>
+    </footer>
+
+    <!-- Intersection Observer for Scroll Animations -->
+    <script>
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: stop observing once animated to keep it visible
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Add hover effects for nav links in footer too
+        document.querySelectorAll('footer ul a').forEach(link => {
+            link.addEventListener('mouseover', function () {
+                this.style.color = 'var(--primary)';
+            });
+            link.addEventListener('mouseout', function () {
+                this.style.color = 'var(--text-muted)';
+            });
+        });
+    </script>
+</body>
+
+</html>
