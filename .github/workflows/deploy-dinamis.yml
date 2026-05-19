@@ -41,8 +41,9 @@ jobs:
         port: 22
         script:  |
           # Hapus container lama jika ada
-          docker rm -f /home/ubuntu/container-dinamis/database
-          docker rm -f /home/ubuntu/container-dinamis/web-dinamis
+          docker rm -f db-webdinamis || true
+          docker rm -f container-dinamis || true
+
     - name: copy compose file EC2 via SCP
       uses: appleboy/scp-action@master
       with:
