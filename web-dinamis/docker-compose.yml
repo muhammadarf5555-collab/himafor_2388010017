@@ -29,8 +29,9 @@ services:
       - DB_PASSWORD=Arifrizky12345678
       - DB_NAME=dbcompro_2388010017
       - NEXTAUTH_SECRET=ini-adalah-kata-random
-      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_URL=http://54.254.89.240/:3000
     depends_on:
       - db-webdinamis
 
-volumes: db_data:{}
+volumes:
+  db_data:
