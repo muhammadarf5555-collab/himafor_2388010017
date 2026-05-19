@@ -2,7 +2,7 @@ name: Deploy Web Static to AWS EC2
 on:
   push:
     branches: [ main ]
-    path:
+    paths:
       - 'web-statis/**'
       - '.github/workflows/deploy.yaml'
 jobs:
@@ -19,7 +19,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: ./web-statis
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/himafor_2388010017:latest
 
