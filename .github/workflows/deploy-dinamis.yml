@@ -27,7 +27,7 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/web-dinamis_2388010017:latest
 
   deploy-to-ec2:
-    needs: build-and-deploy-web-dinamis
+    needs: build-and-deploy-web-dinamis_2388010017
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
